@@ -1,0 +1,85 @@
+@model Registration.Models.Person
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Person</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" id="name"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" id="age"/>
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Occupation" class="control-label"></label>
+                <input asp-for="Occupation" class="form-control" id="occupation"/>
+                <span asp-validation-for="Occupation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" id="btn"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            // Add a click event to the button with id "btn"
+            $("#btn").on("click", (e) => {
+                e.preventDefault(); 
+                console.log("Button clicked!");
+                postRequest(); 
+            });
+        });
+
+        const postRequest = () => {
+            const name = $('#name');
+            const age = $('#age');
+            const occupation = $('#occupation');
+
+            const data = {
+                "Name": name.val(),
+                "Age": Number(age.val()),
+                "Occupation" : occupation.val()
+            }
+
+            $.ajax({
+                url: "https://localhost:7051/api/data/create",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(data), 
+                success: ((data) => {
+                    alert("Insert Successful");
+                    name.val("");
+                    age.val("");
+                    occupation.val("");
+                    window.location.href = "/"; 
+
+                }), 
+                error: ((err) => {
+                    console.log(err);
+                })
+            })
+        }
+    </script>
+
+}

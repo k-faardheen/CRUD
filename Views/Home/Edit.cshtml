@@ -1,0 +1,92 @@
+@model Registration.Models.Person
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Person</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div id="id">@Model.Id</div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Occupation" class="control-label"></label>
+                <input asp-for="Occupation" class="form-control" />
+                <span asp-validation-for="Occupation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" id="btn" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+    $(document).ready(function () {
+            // Add a click event to the button wi2222th id "btn"
+            $("#btn").on("click", (e) => {
+                e.preventDefault();
+                console.log("Button clicked!");
+                postRequest();
+            });
+        });
+
+        const postRequest = () => {
+            const id = $('#id');
+            console.log(id.text()); 
+            const name = $('#Name');
+            const age = $('#Age');
+            const occupation = $('#Occupation');
+
+            const data = {
+                "Id": Number(id.text()), 
+                "Name": name.val(),
+                "Age": Number(age.val()),
+                "Occupation": occupation.val()
+            }
+
+            $.ajax({
+                url: "https://localhost:7051/api/data/update",
+                method: "PATCH",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: ((data) => {
+                    alert("Updated Successfully");
+                    name.val("");
+                    age.val("");
+                    occupation.val("");
+                    window.location.href = "/"; 
+
+                }),
+                error: ((err) => {
+                    console.log(err);
+                })
+            })
+        }
+
+    </script>
+    
+}

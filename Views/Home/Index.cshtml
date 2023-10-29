@@ -1,0 +1,60 @@
+@model IEnumerable<Registration.Models.Person>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Occupation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+   
+</table>
+
+<script> 
+    fetch("https://localhost:7051/api/data")
+        .then((res) => res.json())
+        .then((data) => renderData(data)) 
+        .catch((err) => console.log(err));
+
+    const renderData = (data) => {
+        const table = $('tbody');
+        
+        data.forEach((item) => {
+            const tr = document.createElement('tr'); 
+
+            tr.innerHTML = `
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>${item.age}</td>
+                <td>${item.occupation}</td>
+                <td><a href="Home/Edit/${item.name}" id="edit">Edit</a></td>
+                <td><a href="/Home/Delete/${item.id}" id="delete">Delete</a></td>
+            `;
+            console.log(item)
+            table.append(tr); 
+        })
+    }
+</script>
